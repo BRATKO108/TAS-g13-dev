@@ -32,6 +32,7 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
 import lu.uni.lassy.excalibur.examples.icrash.dev.model.Message;
 import lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController;
 import lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.coordinator.CreateICrashCoordGUI;
+import lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.coordinatormobility.CreateICrashCoordMobGUI;
 import javafx.scene.layout.GridPane;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -169,6 +170,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	 * We open a new window when a coordinator is created, so we also should close the window if the coordinator is deleted 
 	 */
 	private ArrayList<CreateICrashCoordGUI> listOfOpenWindows = new ArrayList<CreateICrashCoordGUI>();
+	private ArrayList<CreateICrashCoordMobGUI> listOfOpenWindows1 = new ArrayList<CreateICrashCoordMobGUI>();
 	/*
 	 * Methods used within the GUI
 	 */
@@ -249,7 +251,8 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 						switch(type){
 						case Add:
 							if (userController.oeAddCoordinator(txtfldUserID.getText(), txtfldUserName.getText(), psswrdfldPassword.getText()).getValue()){
-								listOfOpenWindows.add(new CreateICrashCoordGUI(coordID, systemstateController.getActCoordinator(txtfldUserName.getText())));
+								//listOfOpenWindows.add(new CreateICrashCoordGUI(coordID, systemstateController.getActCoordinator(txtfldUserName.getText())));
+								listOfOpenWindows1.add(new CreateICrashCoordMobGUI(coordID, systemstateController.getActCoordinator(txtfldUserName.getText())));
 								anchrpnCoordinatorDetails.getChildren().remove(grdpn);
 							}
 							else
@@ -258,6 +261,10 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 						case Delete:
 							if (userController.oeDeleteCoordinator(txtfldUserID.getText()).getValue()){
 								for(CreateICrashCoordGUI window : listOfOpenWindows){
+									if (window.getDtCoordinatorID().value.getValue().equals(coordID.value.getValue()))
+										window.closeWindow();
+								}
+								for(CreateICrashCoordMobGUI window : listOfOpenWindows1){
 									if (window.getDtCoordinatorID().value.getValue().equals(coordID.value.getValue()))
 										window.closeWindow();
 								}
@@ -365,3 +372,4 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		return new PtBoolean(false);
 	}	
 }
+
